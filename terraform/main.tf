@@ -38,7 +38,13 @@ resource "google_composer_environment" "my_composer" {
 # 3. Data Warehouse (BigQuery Dataset)
 resource "google_bigquery_dataset" "dwh" {
   dataset_id                  = "curso_dwh"
-  location                    = "EU"
+  location                    = "europe-southwest1"
   description                 = "Data Warehouse para el curso de Composer"
   delete_contents_on_destroy  = true # Para que no dé error al destruir el proyecto al final
 }
+
+# 4. Sistema de Mensajería en Tiempo Real (Pub/Sub)
+resource "google_pubsub_topic" "streaming_topic" {
+  name = "ventas-streaming"
+}
+
