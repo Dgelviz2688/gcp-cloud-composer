@@ -11,7 +11,7 @@ variable "service_account_email" { type = string }
 # 1. Data Lake (Bucket de Cloud Storage)
 resource "google_storage_bucket" "data_lake" {
   name          = "${var.project_id}-data-lake"
-  location      = "EU"
+  location      = "europe-southwest1"
   force_destroy = true # Solo para el curso, permite borrar el bucket aunque tenga archivos
   
   uniform_bucket_level_access = true
@@ -47,4 +47,3 @@ resource "google_bigquery_dataset" "dwh" {
 resource "google_pubsub_topic" "streaming_topic" {
   name = "ventas-streaming"
 }
-
