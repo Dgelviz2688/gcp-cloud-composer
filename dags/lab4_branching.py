@@ -1,13 +1,16 @@
-from airflow import DAG
-from airflow.operators.python import BranchPythonOperator
-from airflow.operators.empty import EmptyOperator
+from airflow.sdk import DAG
+from airflow.providers.standard.operators.python import BranchPythonOperator
+from airflow.providers.standard.operators.empty import EmptyOperator
 from airflow.providers.google.cloud.operators.bigquery import BigQueryInsertJobOperator
 from datetime import datetime
+import os
 import random
+
+REGION = os.environ.get('AIRFLOW_VAR_REGION', 'europe-southwest1')
 
 # 1. Función que simula un control de calidad
 def check_data_quality():
-    print("🔍 Analizando nulos, duplicados y formatos en BigQuery...")
+    print("🔍 Analizando nulos, duplicados y formatos en BigQuery... (simulado)")
     # Simulamos que el 80% de las veces los datos son buenos y el 20% son malos
     calidad_ok = random.choices([True, False], weights=[80, 20])[0]
     
@@ -49,14 +52,15 @@ with DAG(
                 SELECT 
                     producto, 
                     SUM(cantidad) as total_unidades, 
-                    ROUND(SUM(precio), 2) as ingresos_totales
+                    ROUND(SUM(cantidad * precio), 2) as ingresos_totales
                 FROM `{{ var.value.project_id }}.curso_dwh.ventas_raw`
                 GROUP BY producto
                 ORDER BY ingresos_totales DESC
                 """,
                 "useLegacySql": False,
             }
-        }
+        },
+        location=REGION
     )
 
     end = EmptyOperator(task_id='end', trigger_rule='none_failed_min_one_success')

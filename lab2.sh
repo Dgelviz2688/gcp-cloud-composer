@@ -1,11 +1,9 @@
-gcloud composer environments storage dags import \
-    --environment composer-curso \
-    --location europe-southwest1 \
-    --source dags/lab2_sensor_gcs.py 
+#!/usr/bin/env bash
+# Lab 2: Sensor de GCS - el DAG espera a que llegue un archivo al Data Lake
+source "$(dirname "$0")/scripts/env.sh"
 
-# python3 scripts/data_generators/generate_batch.py secret-griffin-507921-f0
-python3 scripts/data_generators/generate_batch.py
+import_dag lab2_sensor_gcs.py
+echo "👉 Lanza 'lab2_gcs_sensor' desde la UI de Airflow y pulsa ENTER para generar el archivo..."
+read -r
 
-gcloud composer environments run composer-curso \
-    --location europe-southwest1 \
-    variables set -- project_id curso-gcp-cloud-composer
+"$ROOT_DIR/.venv/bin/python" "$ROOT_DIR/scripts/data_generators/generate_batch.py" "$PROJECT_ID"

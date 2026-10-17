@@ -1,0 +1,3 @@
+# Copia este archivo como terraform.tfvars y pon tu Project ID
+project_id = "tu-project-id"
+region     = "europe-southwest1"

@@ -1,7 +1,11 @@
-from airflow import DAG
+import os
+from airflow.sdk import DAG
 from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
-from airflow.operators.empty import EmptyOperator
+from airflow.providers.standard.operators.empty import EmptyOperator
 from datetime import datetime
+
+# Región del dataset de BigQuery (definida en Terraform como AIRFLOW_VAR_REGION)
+REGION = os.environ.get('AIRFLOW_VAR_REGION', 'europe-southwest1')
 
 with DAG(
     dag_id='lab3_ingesta_bq',
@@ -35,7 +39,9 @@ with DAG(
         # Saltamos la cabecera del CSV
         skip_leading_rows=1,
         # Formato del archivo
-        source_format='CSV'
+        source_format='CSV',
+        # El job de BigQuery debe ejecutarse en la misma región que el dataset
+        location=REGION
     )
 
     end = EmptyOperator(task_id='end')

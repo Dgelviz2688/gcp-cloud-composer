@@ -1,7 +1,9 @@
-# Instalar Apache Beam con las dependencias de Google Cloud
-# pip install apache-beam[gcp]
-pip install apache-beam[gcp] --break-system-packages
+#!/usr/bin/env bash
+# Lab 6: Publicar el pipeline de Apache Beam en el Data Lake
+source "$(dirname "$0")/scripts/env.sh"
 
-# Subimos el archivo a la carpeta 'scripts/' de nuestro Data Lake
-# Asegúrate de cambiar 'TU_PROJECT_ID' por tu ID real
-gcloud storage cp scripts/beam/streaming_pipeline.py gs://secret-griffin-507921-f0-data-lake/scripts/
+# Subimos el script a la carpeta 'scripts/' del Data Lake, desde donde lo leerá Airflow
+gcloud storage cp "$ROOT_DIR/scripts/beam/streaming_pipeline.py" "$DATA_LAKE/scripts/"
+
+# (Opcional) Prueba local con DirectRunner:
+#   python3 -m venv .venv-beam && .venv-beam/bin/pip install -r requirements-beam.txt

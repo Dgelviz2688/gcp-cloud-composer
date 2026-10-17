@@ -1,4 +1,19 @@
+# Terraform
 terraform.tfstate*
 .terraform/
 terraform.tfvars
+
+# Configuración local
+config.env
+
+# Python
+.venv/
+.venv-beam/
+__pycache__/
+*.pyc
+
+# Archivos temporales del generador
+scripts/data_generators/*.csv
+
+# Windows / WSL
 *:Zone.Identifier

@@ -1,6 +1,6 @@
-from airflow import DAG
+from airflow.sdk import DAG
 from airflow.providers.google.cloud.sensors.gcs import GCSObjectsWithPrefixExistenceSensor
-from airflow.operators.empty import EmptyOperator
+from airflow.providers.standard.operators.empty import EmptyOperator
 from datetime import datetime
 
 with DAG(
@@ -16,7 +16,7 @@ with DAG(
     # Este Sensor pausa el DAG hasta que detecte archivos que empiecen por "ventas_"
     wait_for_csv = GCSObjectsWithPrefixExistenceSensor(
         task_id='esperar_archivo_ventas',
-        # Usamos Jinja Templating para leer la variable que creamos en la interfaz
+        # Usamos Jinja Templating para leer la variable AIRFLOW_VAR_PROJECT_ID (definida en Terraform)
         bucket='{{ var.value.project_id }}-data-lake',
         prefix='raw/ventas_',
         poke_interval=30, # Revisa el bucket cada 30 segundos

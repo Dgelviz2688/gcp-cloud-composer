@@ -1,0 +1,2 @@
+# Forzar finales de línea LF: los scripts .sh fallan en Bash con CRLF
+* text=auto eol=lf

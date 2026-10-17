@@ -10,7 +10,7 @@ import subprocess
 def get_default_project():
     try:
         return subprocess.check_output(['gcloud', 'config', 'get-value', 'project']).decode('utf-8').strip()
-    except:
+    except (OSError, subprocess.CalledProcessError):
         return None
 
 # Verificamos que el usuario pase el Project ID como argumento
@@ -71,5 +71,3 @@ finally:
     # Limpiamos el archivo local si existe
     if os.path.exists(local_file_path):
         os.remove(local_file_path)
-
-print("✅ ¡Archivo subido con éxito!")

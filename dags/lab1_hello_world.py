@@ -1,6 +1,6 @@
-from airflow import DAG
-from airflow.operators.empty import EmptyOperator # En Airflow 2.7+ se usa EmptyOperator en vez de Dummy
-from airflow.operators.python import PythonOperator
+from airflow.sdk import DAG  # En Airflow 3 las clases de autoría de DAGs viven en airflow.sdk
+from airflow.providers.standard.operators.empty import EmptyOperator
+from airflow.providers.standard.operators.python import PythonOperator
 from datetime import datetime
 
 # Función en Python que Airflow va a ejecutar

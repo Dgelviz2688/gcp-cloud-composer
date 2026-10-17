@@ -1,10 +1,13 @@
-from airflow.decorators import dag
+import os
+from airflow.sdk import dag
 # 1. Nuevos Imports obligatorios
 from airflow.providers.apache.beam.operators.beam import BeamRunPythonPipelineOperator
 from airflow.providers.google.cloud.operators.dataflow import DataflowConfiguration
 
-from airflow.operators.empty import EmptyOperator
+from airflow.providers.standard.operators.empty import EmptyOperator
 from datetime import datetime
+
+REGION = os.environ.get('AIRFLOW_VAR_REGION', 'europe-southwest1')
 
 @dag(
     dag_id='lab7_dataflow_orchestration',
@@ -27,13 +30,15 @@ def dataflow_streaming_dag():
             "input_topic": "projects/{{ var.value.project_id }}/topics/ventas-streaming",
             "output_table": "{{ var.value.project_id }}:curso_dwh.eventos_streaming",
             "temp_location": "gs://{{ var.value.project_id }}-data-lake/temp/",
-            "region": "europe-southwest1"
+            "region": REGION,
+            # Los workers de Dataflow usan la SA dedicada creada en Terraform
+            "service_account_email": "{{ var.value.dataflow_sa }}"
         },
-        
+
         # 4. Configuración nativa del clúster de Dataflow
         dataflow_config=DataflowConfiguration(
             job_name="composer-streaming-job",
-            location="europe-southwest1",
+            location=REGION,
             # ¡AQUÍ SIGUE ESTANDO EL PARÁMETRO MÁGICO!
             wait_until_finished=False
         )

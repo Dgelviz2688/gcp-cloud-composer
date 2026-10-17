@@ -1,4 +1,5 @@
-gcloud composer environments storage dags import \
-    --environment composer-curso \
-    --location europe-southwest1 \
-    --source dags/lab4_branching.py
+#!/usr/bin/env bash
+# Lab 4: Branching - control de calidad y transformación SQL en BigQuery
+source "$(dirname "$0")/scripts/env.sh"
+
+import_dag lab4_branching.py
